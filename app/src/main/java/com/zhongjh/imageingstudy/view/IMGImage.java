@@ -26,12 +26,17 @@ public class IMGImage {
     /**
      * 完整图片边框
      */
-    private RectF mFrame = new RectF();
+    public RectF mFrame = new RectF();
 
     /**
      * 矩阵
      */
-    private Matrix M = new Matrix();
+    public Matrix M = new Matrix();
+
+    /**
+     * 可视区域，无Scroll 偏移区域
+     */
+    private RectF mWindow = new RectF();
 
     /**
      * 涂鸦路径
@@ -96,9 +101,6 @@ public class IMGImage {
      * M.setTranslate(sx, sy);
      * 矩阵平移到跟view的xy轴一样
      * M.postTranslate(-mFrame.left, -mFrame.top);
-     *
-     *
-     *
      */
     public void addPath(IMGPath path, float sx, float sy) {
         if (path == null) return;
@@ -116,4 +118,22 @@ public class IMGImage {
     public float getScale() {
         return 1f * mFrame.width() / mImage.getWidth();
     }
+
+    public void onWindowChanged(float width, float height) {
+        if (width == 0 || height == 0) {
+            return;
+        }
+
+        mWindow.set(0, 0, width, height);
+    }
+
+    // region 用于学习Matrix的代码
+
+    public void center(int width, int height) {
+        M.setTranslate(mWindow.width() / 2f,mWindow.height() / 2f);
+        M.mapRect(mFrame);
+    }
+
+    // endregion
+
 }
