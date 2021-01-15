@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 
 /**
  * 缩放view
+ * 通过ScaleGestureDetector类触发onScale，在本身基础上添加getFocusX等
  */
 public class ScaleFrameLayout extends FrameLayout implements ScaleGestureDetector.OnScaleGestureListener {
 

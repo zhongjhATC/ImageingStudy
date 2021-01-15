@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ImageingStudy">
-        <activity android:name=".ScaleActivity">
+        <activity android:name=".DoodleActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,10 +17,10 @@
             </intent-filter>
         </activity>
 
-<!--        <activity android:name=".MainActivity" />-->
-<!--        <activity android:name=".ScrollyActivity" />-->
-<!--        <activity android:name=".ScaleActivity" />-->
-
+        <!--        <activity android:name=".MainActivity" />-->
+        <!--        <activity android:name=".ScrollyActivity" />-->
+        <!--        <activity android:name=".ScaleActivity" />-->
+        <!--        <activity android:name=".c" />-->
 
 
     </application>
