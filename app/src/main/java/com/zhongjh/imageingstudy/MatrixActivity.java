@@ -27,9 +27,6 @@ public class MatrixActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matrix);
-
-
-
         MatrixConstraintLayout matrixConstraintLayout = findViewById(R.id.matrixConstraintLayout);
         matrixConstraintLayout.setImageBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_lau)));
     }

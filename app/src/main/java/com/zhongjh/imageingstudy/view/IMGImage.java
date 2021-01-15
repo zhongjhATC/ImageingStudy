@@ -125,11 +125,12 @@ public class IMGImage {
         }
 
         mWindow.set(0, 0, width, height);
+        center();
     }
 
     // region 用于学习Matrix的代码
 
-    public void center(int width, int height) {
+    public void center() {
         M.setTranslate(mWindow.width() / 2f,mWindow.height() / 2f);
         M.mapRect(mFrame);
     }

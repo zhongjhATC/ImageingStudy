@@ -26,7 +26,6 @@ public class MatrixConstraintLayout extends ConstraintLayout {
 
     public void setImageBitmap(Bitmap image) {
         mImage.setBitmap(image);
-        mImage.center(getWidth(),getHeight());
         invalidate();
     }
 
