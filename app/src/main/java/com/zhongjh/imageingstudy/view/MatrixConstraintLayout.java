@@ -38,12 +38,5 @@ public class MatrixConstraintLayout extends ConstraintLayout {
         mImage.onDrawImage(canvas);
     }
 
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        if (changed) {
-            mImage.onWindowChanged(right - left, bottom - top);
-        }
-    }
 
 }

@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class IMGImage {
 
+    private String TAG = IMGImage.class.getSimpleName();
     private Bitmap mImage;
     private Paint mPaint;
 
@@ -99,8 +100,10 @@ public class IMGImage {
     /**
      * addPath方法详解：
      * M.setTranslate(sx, sy);
-     * 矩阵平移到跟view的xy轴一样
+     * 矩阵平移到跟view的xy轴一样,注意，是getScrollX()和getScrolly()
+     *
      * M.postTranslate(-mFrame.left, -mFrame.top);
+     * 如果按照getScrollX()直接绘制进手机屏幕上是会出格的，因为view能缩放到比手机屏幕还要大，那么就需要减掉mFrame的x和y，剩下的就是手机绘制的正确的点
      */
     public void addPath(IMGPath path, float sx, float sy) {
         if (path == null) return;
@@ -115,26 +118,12 @@ public class IMGImage {
         mDoodles.add(path);
     }
 
+    /**
+     * 1 * view缩放后的宽度 / 图片固定宽度 = 缩放比例
+     */
     public float getScale() {
         return 1f * mFrame.width() / mImage.getWidth();
     }
 
-    public void onWindowChanged(float width, float height) {
-        if (width == 0 || height == 0) {
-            return;
-        }
-
-        mWindow.set(0, 0, width, height);
-        center();
-    }
-
-    // region 用于学习Matrix的代码
-
-    public void center() {
-        M.setTranslate(mWindow.width() / 2f,mWindow.height() / 2f);
-        M.mapRect(mFrame);
-    }
-
-    // endregion
 
 }
