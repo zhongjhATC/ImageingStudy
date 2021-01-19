@@ -7,9 +7,12 @@ import android.graphics.CornerPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.Log;
 
+import com.zhongjh.imageingstudy.common.IMGMode;
 import com.zhongjh.imageingstudy.common.IMGPath;
 
 import java.util.ArrayList;
@@ -21,8 +24,8 @@ import java.util.List;
 public class IMGImage {
 
     private String TAG = IMGImage.class.getSimpleName();
-    private Bitmap mImage;
-    private Paint mPaint;
+    public Bitmap mImage, mMosaicImage;
+    public Paint mPaint,mMosaicPaint;
 
     /**
      * 完整图片边框
@@ -43,6 +46,10 @@ public class IMGImage {
      * 涂鸦路径
      */
     private List<IMGPath> mDoodles = new ArrayList<>();
+    /**
+     * 马赛克路径
+     */
+    private List<IMGPath> mMosaics = new ArrayList<>();
 
     {
         // Doodle&Mosaic 's paint
@@ -61,12 +68,39 @@ public class IMGImage {
         }
 
         this.mImage = bitmap;
+
+        // 清空马赛克图层
+        if (mMosaicImage != null) {
+            mMosaicImage.recycle();
+        }
+        this.mMosaicImage = null;
+
+        makeMosaicBitmap();
+
         mFrame.set(0, 0, mImage.getWidth(), mImage.getHeight());
     }
 
     public void onDrawImage(Canvas canvas) {
         // 在mFrame该边框绘制图片
         canvas.drawBitmap(mImage, null, mFrame, null);
+    }
+
+    public int onDrawMosaicsPath(Canvas canvas) {
+        Log.d(TAG, "onDrawMosaicsPath");
+        int layerCount = canvas.saveLayer(mFrame, null, Canvas.ALL_SAVE_FLAG);
+
+        if (!isMosaicEmpty()) {
+            canvas.save();
+            float scale = getScale();
+            canvas.translate(mFrame.left, mFrame.top);
+            canvas.scale(scale, scale);
+            for (IMGPath path : mMosaics) {
+                path.onDrawMosaic(canvas, mPaint);
+            }
+            canvas.restore();
+        }
+
+        return layerCount;
     }
 
     public void onScaleBegin() {
@@ -98,15 +132,26 @@ public class IMGImage {
     }
 
     /**
+     * 马赛克
+     */
+    public void onDrawMosaic(Canvas canvas, int layerCount) {
+        Log.d(TAG, "onDrawMosaic");
+        canvas.drawBitmap(mMosaicImage, null, mFrame, mMosaicPaint);
+        canvas.restoreToCount(layerCount);
+    }
+
+    /**
      * addPath方法详解：
      * M.setTranslate(sx, sy);
      * 矩阵平移到跟view的xy轴一样,注意，是getScrollX()和getScrolly()
-     *
+     * <p>
      * M.postTranslate(-mFrame.left, -mFrame.top);
      * 如果按照getScrollX()直接绘制进手机屏幕上是会出格的，因为view能缩放到比手机屏幕还要大，那么就需要减掉mFrame的x和y，剩下的就是手机绘制的正确的点
      */
     public void addPath(IMGPath path, float sx, float sy) {
         if (path == null) return;
+
+        path.setMode(IMGMode.DOODLE);
 
         float scale = 1f / getScale();
         M.setTranslate(sx, sy);
@@ -119,11 +164,62 @@ public class IMGImage {
     }
 
     /**
+     * 方法跟addPath一样，只是区别加入到马赛克路径列表并且加粗了路径
+     */
+    public void addPathMosaics(IMGPath path, float sx, float sy) {
+        if (path == null) return;
+
+        path.setMode(IMGMode.MOSAIC);
+
+        float scale = 1f / getScale();
+        M.setTranslate(sx, sy);
+        M.postTranslate(-mFrame.left, -mFrame.top);
+        M.postScale(scale, scale);
+        // 矩阵变换
+        path.transform(M);
+
+        path.setWidth(path.getWidth() * scale);
+        mMosaics.add(path);
+    }
+
+    /**
      * 1 * view缩放后的宽度 / 图片固定宽度 = 缩放比例
      */
     public float getScale() {
         return 1f * mFrame.width() / mImage.getWidth();
     }
 
+    public boolean isMosaicEmpty() {
+        Log.d(TAG, "isMosaicEmpty");
+        return mMosaics.isEmpty();
+    }
+
+    /**
+     * 创建同样的马赛克图和马赛克画笔
+     */
+    private void makeMosaicBitmap() {
+        Log.d(TAG, "makeMosaicBitmap");
+        if (mMosaicImage != null || mImage == null) {
+            return;
+        }
+
+        // 原图的宽高相除64
+        int w = Math.round(mImage.getWidth() / 64f);
+        int h = Math.round(mImage.getHeight() / 64f);
+
+        // 取最大值，即不能小于8
+        w = Math.max(w, 8);
+        h = Math.max(h, 8);
+
+        // 马赛克画刷，注意是SRC_IN，刷子刷后就显示相应的马赛克层了
+        if (mMosaicPaint == null) {
+            mMosaicPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mMosaicPaint.setFilterBitmap(false);
+            mMosaicPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        }
+
+        // 创建马赛克图
+        mMosaicImage = Bitmap.createScaledBitmap(mImage, w, h, false);
+    }
 
 }

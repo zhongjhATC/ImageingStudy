@@ -83,19 +83,15 @@ public class IMGPath {
     }
 
     public void onDrawDoodle(Canvas canvas, Paint paint) {
-        if (mode == IMGMode.DOODLE) {
-            paint.setColor(color);
-            paint.setStrokeWidth(BASE_DOODLE_WIDTH);
-            // rewind
-            canvas.drawPath(path, paint);
-        }
+        paint.setColor(color);
+        paint.setStrokeWidth(BASE_DOODLE_WIDTH);
+        // rewind
+        canvas.drawPath(path, paint);
     }
 
     public void onDrawMosaic(Canvas canvas, Paint paint) {
-        if (mode == IMGMode.MOSAIC) {
-            paint.setStrokeWidth(width);
-            canvas.drawPath(path, paint);
-        }
+        paint.setStrokeWidth(width);
+        canvas.drawPath(path, paint);
     }
 
     public void transform(Matrix matrix) {

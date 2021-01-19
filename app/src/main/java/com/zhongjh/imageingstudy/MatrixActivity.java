@@ -88,8 +88,8 @@ public class MatrixActivity extends AppCompatActivity {
      */
     public void test2(View view) {
         matrix.reset();
-        matrix.preTranslate(DisplayMetricsUtils.dip2px(100), DisplayMetricsUtils.dip2px(100));
         matrix.postScale(2,2);
+        matrix.preTranslate(DisplayMetricsUtils.dip2px(100), DisplayMetricsUtils.dip2px(100));
         imageView.setImageMatrix(matrix);
         matrix.reset();
     }
@@ -110,7 +110,7 @@ public class MatrixActivity extends AppCompatActivity {
 
 
     /**
-     * 执行顺序：因为有setScale，所以它上面的两行代码postTranslate和preScale无效，最终顺序是：setScale - preTranslate - postScale
+     * 执行顺序：因为有setScale，所以它上面的两行代码postTranslate和preScale无效，最终顺序是：preTranslate - setScale -  postScale
      */
     public void test4(View view) {
         matrix.reset();

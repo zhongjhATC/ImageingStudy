@@ -34,6 +34,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.setClass(MainActivity.this, DoodleActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.btnMosaic:
+                intent.setClass(MainActivity.this, MosaicActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 }

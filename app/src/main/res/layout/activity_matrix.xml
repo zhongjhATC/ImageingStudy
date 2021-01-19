@@ -210,7 +210,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:onClick="test3"
-            android:text="4次转换"
+            android:text="多次转换"
             tools:ignore="HardcodedText" />
 
         <Button
@@ -218,7 +218,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:onClick="test4"
-            android:text="4层转换2"
+            android:text="加入setScale"
             tools:ignore="HardcodedText" />
 
     </LinearLayout>

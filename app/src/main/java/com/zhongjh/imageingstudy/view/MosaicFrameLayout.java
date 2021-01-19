@@ -8,7 +8,6 @@ import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
@@ -16,30 +15,27 @@ import com.zhongjh.imageingstudy.common.IMGPath;
 import com.zhongjh.imageingstudy.common.Pen;
 
 /**
- * 涂鸦
- * 同样是通过onTouch切口切入
- * 每次的event都是不同id触发，在每一次的触发onTouchEvent都重新用钢笔Pen存储path,onDraw绘画的时候会根据path来生成相应路径
- * 要加多一个特殊做法的是，在每次onTouchEvent结束后，重新根据坐标重新生成一次path（详情看onPathDone）
- * 因为随着每次扩大缩小，整个长宽会改变，所以我们绘画时，生成的路径也能随着长宽改变
+ * 马赛克，跟涂鸦差不多
  */
-public class DoodleFrameLayout extends FrameLayout {
+public class MosaicFrameLayout extends FrameLayout {
 
-    private String TAG = DoodleFrameLayout.class.getSimpleName();
+    private String TAG = MosaicFrameLayout.class.getSimpleName();
     private IMGImage mImage = new IMGImage();
-    // 画笔
     private Paint mDoodlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    // 马赛克画刷
+    private Paint mMosaicPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     // 钢笔包括所绘制的路径
     private Pen mPen = new Pen();
 
-    public DoodleFrameLayout(Context context) {
+    public MosaicFrameLayout(Context context) {
         this(context, null, 0);
     }
 
-    public DoodleFrameLayout(Context context, AttributeSet attrs) {
+    public MosaicFrameLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public DoodleFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MosaicFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -61,21 +57,34 @@ public class DoodleFrameLayout extends FrameLayout {
         mDoodlePaint.setPathEffect(new CornerPathEffect(IMGPath.BASE_DOODLE_WIDTH));
         mDoodlePaint.setStrokeCap(Paint.Cap.ROUND);
         mDoodlePaint.setStrokeJoin(Paint.Join.ROUND);
+
+        // 马赛克画刷
+        mMosaicPaint.setStyle(Paint.Style.STROKE);
+        mMosaicPaint.setStrokeWidth(IMGPath.BASE_MOSAIC_WIDTH);
+        mMosaicPaint.setColor(Color.BLACK);
+        mMosaicPaint.setPathEffect(new CornerPathEffect(IMGPath.BASE_MOSAIC_WIDTH));
+        mMosaicPaint.setStrokeCap(Paint.Cap.ROUND);
+        mMosaicPaint.setStrokeJoin(Paint.Join.ROUND);
     }
 
     private void onDrawImages(Canvas canvas) {
         // 图片
         mImage.onDrawImage(canvas);
 
-        // 最后根据全部路径涂鸦
-        mImage.onDrawDoodles(canvas);
+        // 马赛克
+        if (!mImage.isMosaicEmpty() || (!mPen.isEmpty())) {
+            int count = mImage.onDrawMosaicsPath(canvas);
 
-        mDoodlePaint.setColor(mPen.getColor());
-        mDoodlePaint.setStrokeWidth(IMGPath.BASE_DOODLE_WIDTH * mImage.getScale());
-        canvas.save();
-        canvas.translate(getScrollX(), getScrollY());
-        canvas.drawPath(mPen.getPath(), mDoodlePaint);
-        canvas.restore();
+            mDoodlePaint.setStrokeWidth(IMGPath.BASE_MOSAIC_WIDTH);
+            canvas.save();
+            canvas.translate(getScrollX(), getScrollY());
+            canvas.drawPath(mPen.getPath(), mDoodlePaint);
+            canvas.restore();
+
+            mImage.onDrawMosaic(canvas, count);
+            canvas.save();
+            canvas.restore();
+        }
     }
 
     /**
@@ -140,7 +149,7 @@ public class DoodleFrameLayout extends FrameLayout {
         if (mPen.isEmpty()) {
             return false;
         }
-        mImage.addPath(mPen.toPath(), getScrollX(), getScrollY());
+        mImage.addPathMosaics(mPen.toPath(), getScrollX(), getScrollY());
         mPen.reset();
         invalidate();
         return true;
