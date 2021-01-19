@@ -71,14 +71,6 @@ public class MatrixActivity extends AppCompatActivity {
     }
 
     /**
-     * 测试自定义的缩放
-     */
-    public void testScale(View view) {
-        matrix.setScale(0.5f, 0.5f, DisplayMetricsUtils.dip2px(50), DisplayMetricsUtils.dip2px(50));
-        imageView.setImageMatrix(matrix);
-    }
-
-    /**
      * 先pre-后post
      */
     public void test1(View view) {
