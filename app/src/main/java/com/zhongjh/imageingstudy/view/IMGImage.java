@@ -6,14 +6,13 @@ import android.graphics.Color;
 import android.graphics.CornerPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.Log;
-
 import com.zhongjh.imageingstudy.common.IMGMode;
 import com.zhongjh.imageingstudy.common.IMGPath;
+import com.zhongjh.imageingstudy.core.clip.IMGClipWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +30,73 @@ public class IMGImage {
      * 完整图片边框
      */
     public RectF mFrame = new RectF();
+
+    // region 裁剪
+
+    /**
+     * 是否取消动画
+     */
+    private boolean isAnimCanceled = false;
+
+    /**
+     * 是否冻结的
+     */
+    private boolean isFreezing = false;
+
+    /**
+     * 裁剪图片边框（显示的图片区域）
+     */
+    private RectF mClipFrame = new RectF();
+
+    /**
+     * 裁剪窗口
+     */
+    private IMGClipWindow mClipWin = new IMGClipWindow();
+
+    private float mRotate = 0, mTargetRotate = 0;
+
+    private IMGMode mMode = IMGMode.NONE;
+
+    private RectF mBackupClipFrame = new RectF();
+
+    private float mBackupClipRotate = 0;
+
+    // endregion 裁剪
+
+
+    public void setMode(IMGMode mode) {
+        Log.d(TAG, "setMode");
+
+        if (this.mMode == mode) return;
+
+        if (mode == IMGMode.CLIP) {
+            setFreezing(true);
+        }
+
+        this.mMode = mode;
+
+        if (mMode == IMGMode.CLIP) {
+
+            // 备份裁剪前Clip 区域
+            mBackupClipRotate = getRotate();
+            mBackupClipFrame.set(mClipFrame);
+
+            float scale = 1 / getScale();
+            M.setTranslate(-mFrame.left, -mFrame.top);
+            M.postScale(scale, scale);
+            M.mapRect(mBackupClipFrame);
+
+            // 重置裁剪区域
+            mClipWin.reset(mClipFrame, getTargetRotate());
+        } else {
+
+            if (mMode == IMGMode.MOSAIC) {
+                makeMosaicBitmap();
+            }
+
+            mClipWin.setClipping(false);
+        }
+    }
 
     /**
      * 矩阵
@@ -85,8 +151,12 @@ public class IMGImage {
         canvas.drawBitmap(mImage, null, mFrame, null);
     }
 
+    /**
+     * 绘制马赛克路径
+     */
     public int onDrawMosaicsPath(Canvas canvas) {
         Log.d(TAG, "onDrawMosaicsPath");
+        // 所有状态都保存
         int layerCount = canvas.saveLayer(mFrame, null, Canvas.ALL_SAVE_FLAG);
 
         if (!isMosaicEmpty()) {
@@ -132,7 +202,7 @@ public class IMGImage {
     }
 
     /**
-     * 马赛克
+     * 绘制马赛克
      */
     public void onDrawMosaic(Canvas canvas, int layerCount) {
         Log.d(TAG, "onDrawMosaic");
@@ -194,6 +264,11 @@ public class IMGImage {
         return mMosaics.isEmpty();
     }
 
+    public RectF getClipFrame() {
+        Log.d(TAG, "getClipFrame");
+        return mClipFrame;
+    }
+
     /**
      * 创建同样的马赛克图和马赛克画笔
      */
@@ -221,5 +296,62 @@ public class IMGImage {
         // 创建马赛克图
         mMosaicImage = Bitmap.createScaledBitmap(mImage, w, h, false);
     }
+
+    // region 裁剪
+
+    public void onDrawClip(Canvas canvas, float scrollX, float scrollY) {
+        Log.d(TAG, "onDrawClip");
+        if (mMode == IMGMode.CLIP) {
+            mClipWin.onDraw(canvas);
+        }
+    }
+
+    /**
+     * 这是只考虑矩阵区域的测试
+     */
+    public void onDrawClipTest(Canvas canvas, float scrollX, float scrollY) {
+        Log.d(TAG, "onDrawClip");
+        if (mMode == IMGMode.CLIP) {
+            mClipWin.onDrawTest(canvas);
+        }
+    }
+
+    public float getRotate() {
+        Log.d(TAG, "getRotate");
+        return mRotate;
+    }
+
+    public float getTargetRotate() {
+        Log.d(TAG, "getTargetRotate");
+        return mTargetRotate;
+    }
+
+    /**
+     * 是否冻结的
+     */
+    public boolean isFreezing() {
+        Log.d(TAG, "isFreezing");
+        return isFreezing;
+    }
+
+    private void setFreezing(boolean freezing) {
+        Log.d(TAG, "setFreezing");
+        if (freezing != isFreezing) {
+            rotateStickers(freezing ? -getRotate() : getTargetRotate());
+            isFreezing = freezing;
+        }
+    }
+
+    private void rotateStickers(float rotate) {
+        Log.d(TAG, "rotateStickers");
+        M.setRotate(rotate, mClipFrame.centerX(), mClipFrame.centerY());
+    }
+
+    public void onHomingStart(boolean isRotate) {
+        Log.d(TAG, "onHomingStart");
+        isAnimCanceled = false;
+    }
+
+    // endregion 裁剪
 
 }

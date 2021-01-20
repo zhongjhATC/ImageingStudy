@@ -38,6 +38,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.setClass(MainActivity.this, MosaicActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.btnArea:
+                intent.setClass(MainActivity.this, AreaActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btnClip:
+                intent.setClass(MainActivity.this, ClipActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 }

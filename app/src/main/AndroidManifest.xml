@@ -23,6 +23,8 @@
         <activity android:name=".DoodleActivity" />
         <activity android:name=".MatrixActivity" />
         <activity android:name=".MosaicActivity" />
+        <activity android:name=".AreaActivity" />
+        <activity android:name=".ClipActivity" />
 
     </application>
 
