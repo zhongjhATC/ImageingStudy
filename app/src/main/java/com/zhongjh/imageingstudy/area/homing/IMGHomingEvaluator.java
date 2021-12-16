@@ -1,4 +1,4 @@
-package com.zhongjh.imageingstudy.core.homing;
+package com.zhongjh.imageingstudy.area.homing;
 
 import android.animation.TypeEvaluator;
 
@@ -12,10 +12,6 @@ public class IMGHomingEvaluator implements TypeEvaluator<IMGHoming> {
 
     public IMGHomingEvaluator() {
 
-    }
-
-    public IMGHomingEvaluator(IMGHoming homing) {
-        this.homing = homing;
     }
 
     @Override

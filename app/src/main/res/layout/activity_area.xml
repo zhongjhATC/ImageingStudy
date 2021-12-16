@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.zhongjh.imageingstudy.view.AreaFrameLayout
-        android:id="@+id/areaFrameLayout"
+    <ImageView
+        android:id="@+id/imgLau"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000" />
+        android:src="@drawable/ic_lau" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

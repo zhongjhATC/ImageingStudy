@@ -1,10 +1,10 @@
-package com.zhongjh.imageingstudy.core.anim;
+package com.zhongjh.imageingstudy.area.anim;
 
 import android.animation.ValueAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-import com.zhongjh.imageingstudy.core.homing.IMGHoming;
-import com.zhongjh.imageingstudy.core.homing.IMGHomingEvaluator;
+import com.zhongjh.imageingstudy.area.homing.IMGHoming;
+import com.zhongjh.imageingstudy.area.homing.IMGHomingEvaluator;
 
 /**
  * Created by felix on 2017/11/28 下午12:54.

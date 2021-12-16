@@ -1,4 +1,4 @@
-package com.zhongjh.imageingstudy.core.homing;
+package com.zhongjh.imageingstudy.area.homing;
 
 /**
  * Created by felix on 2017/11/28 下午4:14.

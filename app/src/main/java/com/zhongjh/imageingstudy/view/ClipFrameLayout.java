@@ -10,7 +10,7 @@ import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.zhongjh.imageingstudy.common.IMGMode;
-import com.zhongjh.imageingstudy.core.anim.IMGHomingAnimator;
+import com.zhongjh.imageingstudy.area.anim.IMGHomingAnimator;
 
 /**
  * 裁剪

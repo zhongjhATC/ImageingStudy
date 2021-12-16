@@ -3,7 +3,7 @@ package com.zhongjh.imageingstudy.core.util;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 
-import com.zhongjh.imageingstudy.core.homing.IMGHoming;
+import com.zhongjh.imageingstudy.area.homing.IMGHoming;
 
 
 /**
