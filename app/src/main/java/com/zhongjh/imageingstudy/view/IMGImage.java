@@ -135,13 +135,13 @@ public class IMGImage {
 
         this.mImage = bitmap;
 
-        // 清空马赛克图层
-        if (mMosaicImage != null) {
-            mMosaicImage.recycle();
-        }
-        this.mMosaicImage = null;
-
-        makeMosaicBitmap();
+//        // 清空马赛克图层
+//        if (mMosaicImage != null) {
+//            mMosaicImage.recycle();
+//        }
+//        this.mMosaicImage = null;
+//
+//        makeMosaicBitmap();
 
         mFrame.set(0, 0, mImage.getWidth(), mImage.getHeight());
     }
