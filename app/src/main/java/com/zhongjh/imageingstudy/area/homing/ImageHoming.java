@@ -1,10 +1,10 @@
 package com.zhongjh.imageingstudy.area.homing;
 
 /**
- * Created by felix on 2017/11/28 下午4:14.
+ * @author felix
+ * @date 2017/11/28 下午4:14
  */
-
-public class IMGHoming {
+public class ImageHoming {
 
     public float x, y;
 
@@ -12,7 +12,7 @@ public class IMGHoming {
 
     public float rotate;
 
-    public IMGHoming(float x, float y, float scale, float rotate) {
+    public ImageHoming(float x, float y, float scale, float rotate) {
         this.x = x;
         this.y = y;
         this.scale = scale;
@@ -26,19 +26,19 @@ public class IMGHoming {
         this.rotate = rotate;
     }
 
-    public void concat(IMGHoming homing) {
+    public void concat(ImageHoming homing) {
         this.scale *= homing.scale;
         this.x += homing.x;
         this.y += homing.y;
     }
 
-    public void rConcat(IMGHoming homing) {
+    public void rConcat(ImageHoming homing) {
         this.scale *= homing.scale;
         this.x -= homing.x;
         this.y -= homing.y;
     }
 
-    public static boolean isRotate(IMGHoming sHoming, IMGHoming eHoming) {
+    public static boolean isRotate(ImageHoming sHoming, ImageHoming eHoming) {
         return Float.compare(sHoming.rotate, eHoming.rotate) != 0;
     }
 

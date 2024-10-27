@@ -3,20 +3,21 @@ package com.zhongjh.imageingstudy.area.anim;
 import android.animation.ValueAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-import com.zhongjh.imageingstudy.area.homing.IMGHoming;
-import com.zhongjh.imageingstudy.area.homing.IMGHomingEvaluator;
+import com.zhongjh.imageingstudy.area.homing.ImageHoming;
+import com.zhongjh.imageingstudy.area.homing.ImageHomingEvaluator;
 
 /**
- * Created by felix on 2017/11/28 下午12:54.
+ *
+ * @author felix
+ * @date 2017/11/28 下午12:54
  */
-
-public class IMGHomingAnimator extends ValueAnimator {
+public class ImageHomingAnimator extends ValueAnimator {
 
     private boolean isRotate = false;
 
-    private IMGHomingEvaluator mEvaluator;
+    private ImageHomingEvaluator mEvaluator;
 
-    public IMGHomingAnimator() {
+    public ImageHomingAnimator() {
         setInterpolator(new AccelerateDecelerateInterpolator());
     }
 
@@ -24,14 +25,14 @@ public class IMGHomingAnimator extends ValueAnimator {
     public void setObjectValues(Object... values) {
         super.setObjectValues(values);
         if (mEvaluator == null) {
-            mEvaluator = new IMGHomingEvaluator();
+            mEvaluator = new ImageHomingEvaluator();
         }
         setEvaluator(mEvaluator);
     }
 
-    public void setHomingValues(IMGHoming sHoming, IMGHoming eHoming) {
+    public void setHomingValues(ImageHoming sHoming, ImageHoming eHoming) {
         setObjectValues(sHoming, eHoming);
-        isRotate = IMGHoming.isRotate(sHoming, eHoming);
+        isRotate = ImageHoming.isRotate(sHoming, eHoming);
     }
 
     public boolean isRotate() {

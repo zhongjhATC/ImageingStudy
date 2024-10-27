@@ -3,18 +3,19 @@ package com.zhongjh.imageingstudy.core.util;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 
-import com.zhongjh.imageingstudy.area.homing.IMGHoming;
+import com.zhongjh.imageingstudy.area.homing.ImageHoming;
 
 
 /**
- * Created by felix on 2017/12/5 下午2:20.
+ *
+ * @author felix
+ * @date 2017/12/5 下午2:20
  */
-
-public class IMGUtils {
+public class ImageUtils {
 
     private static final Matrix M = new Matrix();
 
-    private IMGUtils() {
+    private ImageUtils() {
 
     }
 
@@ -60,8 +61,8 @@ public class IMGUtils {
         );
     }
 
-    public static IMGHoming fitHoming(RectF win, RectF frame) {
-        IMGHoming dHoming = new IMGHoming(0, 0, 1, 0);
+    public static ImageHoming fitHoming(RectF win, RectF frame) {
+        ImageHoming dHoming = new ImageHoming(0, 0, 1, 0);
 
         if (frame.contains(win)) {
             // 不需要Fit
@@ -100,8 +101,8 @@ public class IMGUtils {
         return dHoming;
     }
 
-    public static IMGHoming fitHoming(RectF win, RectF frame, float centerX, float centerY) {
-        IMGHoming dHoming = new IMGHoming(0, 0, 1, 0);
+    public static ImageHoming fitHoming(RectF win, RectF frame, float centerX, float centerY) {
+        ImageHoming dHoming = new ImageHoming(0, 0, 1, 0);
 
         if (frame.contains(win)) {
             // 不需要Fit
@@ -141,8 +142,8 @@ public class IMGUtils {
     }
 
 
-    public static IMGHoming fitHoming(RectF win, RectF frame, boolean isJustInner) {
-        IMGHoming dHoming = new IMGHoming(0, 0, 1, 0);
+    public static ImageHoming fitHoming(RectF win, RectF frame, boolean isJustInner) {
+        ImageHoming dHoming = new ImageHoming(0, 0, 1, 0);
 
         if (frame.contains(win) && !isJustInner) {
             // 不需要Fit
@@ -150,7 +151,8 @@ public class IMGUtils {
         }
 
         // 宽高都小于Win，才有必要放大
-        if (isJustInner || frame.width() < win.width() && frame.height() < win.height()) {
+        boolean isScale = isJustInner || frame.width() < win.width() && frame.height() < win.height();
+        if (isScale) {
             dHoming.scale = Math.min(win.width() / frame.width(), win.height() / frame.height());
         }
 
@@ -181,8 +183,8 @@ public class IMGUtils {
         return dHoming;
     }
 
-    public static IMGHoming fillHoming(RectF win, RectF frame) {
-        IMGHoming dHoming = new IMGHoming(0, 0, 1, 0);
+    public static ImageHoming fillHoming(RectF win, RectF frame) {
+        ImageHoming dHoming = new ImageHoming(0, 0, 1, 0);
         if (frame.contains(win)) {
             // 不需要Fill
             return dHoming;
@@ -211,8 +213,8 @@ public class IMGUtils {
         return dHoming;
     }
 
-    public static IMGHoming fillHoming(RectF win, RectF frame, float pivotX, float pivotY) {
-        IMGHoming dHoming = new IMGHoming(0, 0, 1, 0);
+    public static ImageHoming fillHoming(RectF win, RectF frame, float pivotX, float pivotY) {
+        ImageHoming dHoming = new ImageHoming(0, 0, 1, 0);
         if (frame.contains(win)) {
             // 不需要Fill
             return dHoming;
@@ -241,8 +243,8 @@ public class IMGUtils {
         return dHoming;
     }
 
-    public static IMGHoming fill(RectF win, RectF frame) {
-        IMGHoming dHoming = new IMGHoming(0, 0, 1, 0);
+    public static ImageHoming fill(RectF win, RectF frame) {
+        ImageHoming dHoming = new ImageHoming(0, 0, 1, 0);
 
         if (win.equals(frame)) {
             return dHoming;

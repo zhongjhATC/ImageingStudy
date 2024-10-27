@@ -1,21 +1,14 @@
 package com.zhongjh.imageingstudy;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.zhongjh.imageingstudy.area.ImageViewCustom;
-import com.zhongjh.imageingstudy.area.anim.IMGHomingAnimator;
-import com.zhongjh.imageingstudy.area.homing.IMGHoming;
-import com.zhongjh.imageingstudy.view.ClipFrameLayout;
 
 /**
  * 这是演示裁剪里面的矩阵区域如何变形的

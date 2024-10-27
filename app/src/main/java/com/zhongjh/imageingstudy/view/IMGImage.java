@@ -12,7 +12,7 @@ import android.graphics.RectF;
 import android.util.Log;
 import com.zhongjh.imageingstudy.common.IMGMode;
 import com.zhongjh.imageingstudy.common.IMGPath;
-import com.zhongjh.imageingstudy.core.clip.IMGClipWindow;
+import com.zhongjh.imageingstudy.core.clip.ImageClipView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,7 @@ public class IMGImage {
     /**
      * 裁剪窗口
      */
-    private IMGClipWindow mClipWin = new IMGClipWindow();
+    private ImageClipView mClipWin = new ImageClipView();
 
     private float mRotate = 0, mTargetRotate = 0;
 
@@ -312,7 +312,7 @@ public class IMGImage {
     public void onDrawClipTest(Canvas canvas, float scrollX, float scrollY) {
         Log.d(TAG, "onDrawClip");
         if (mMode == IMGMode.CLIP) {
-            mClipWin.onDrawTest(canvas);
+            mClipWin.onDraw(canvas);
         }
     }
 

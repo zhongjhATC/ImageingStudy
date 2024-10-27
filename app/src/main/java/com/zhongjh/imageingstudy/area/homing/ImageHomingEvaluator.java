@@ -3,26 +3,26 @@ package com.zhongjh.imageingstudy.area.homing;
 import android.animation.TypeEvaluator;
 
 /**
- * Created by felix on 2017/11/28 下午4:13.
+ * @author felix
+ * @date 2017/11/28 下午4:13
  */
+public class ImageHomingEvaluator implements TypeEvaluator<ImageHoming> {
 
-public class IMGHomingEvaluator implements TypeEvaluator<IMGHoming> {
+    private ImageHoming homing;
 
-    private IMGHoming homing;
-
-    public IMGHomingEvaluator() {
+    public ImageHomingEvaluator() {
 
     }
 
     @Override
-    public IMGHoming evaluate(float fraction, IMGHoming startValue, IMGHoming endValue) {
+    public ImageHoming evaluate(float fraction, ImageHoming startValue, ImageHoming endValue) {
         float x = startValue.x + fraction * (endValue.x - startValue.x);
         float y = startValue.y + fraction * (endValue.y - startValue.y);
         float scale = startValue.scale + fraction * (endValue.scale - startValue.scale);
         float rotate = startValue.rotate + fraction * (endValue.rotate - startValue.rotate);
 
         if (homing == null) {
-            homing = new IMGHoming(x, y, scale, rotate);
+            homing = new ImageHoming(x, y, scale, rotate);
         } else {
             homing.set(x, y, scale, rotate);
         }

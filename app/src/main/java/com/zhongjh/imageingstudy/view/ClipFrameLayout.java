@@ -9,8 +9,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.FrameLayout;
 
+import com.zhongjh.imageingstudy.area.anim.ImageHomingAnimator;
 import com.zhongjh.imageingstudy.common.IMGMode;
-import com.zhongjh.imageingstudy.area.anim.IMGHomingAnimator;
 
 /**
  * 裁剪
@@ -22,7 +22,7 @@ public class ClipFrameLayout extends FrameLayout implements Animator.AnimatorLis
     private IMGImage mImage = new IMGImage();
     private IMGMode mMode = IMGMode.NONE;
 
-    private IMGHomingAnimator mHomingAnimator;
+    private ImageHomingAnimator mHomingAnimator;
 
     public ClipFrameLayout(Context context) {
         this(context, null, 0);

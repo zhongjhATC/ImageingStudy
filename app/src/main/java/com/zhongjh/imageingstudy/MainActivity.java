@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.btnClip:
-                intent.setClass(MainActivity.this, ClipActivity.class);
+                intent.setClass(MainActivity.this, CropActivity.class);
                 startActivity(intent);
                 break;
         }

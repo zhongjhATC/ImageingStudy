@@ -4,11 +4,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
-import android.util.Log;
 
-import com.zhongjh.imageingstudy.area.homing.IMGHoming;
-import com.zhongjh.imageingstudy.core.clip.IMGClipWindow;
-import com.zhongjh.imageingstudy.core.util.IMGUtils;
+import com.zhongjh.imageingstudy.area.homing.ImageHoming;
+import com.zhongjh.imageingstudy.core.clip.ImageClipView;
+import com.zhongjh.imageingstudy.core.util.ImageUtils;
 
 /**
  * 自定义View
@@ -29,7 +28,7 @@ public class ImageCustom {
     /**
      * 裁剪窗口
      */
-    private final IMGClipWindow mClipWin = new IMGClipWindow();
+    private final ImageClipView mClipWin = new ImageClipView();
 
     /**
      * 裁剪图片边框（显示的图片区域）
@@ -73,12 +72,12 @@ public class ImageCustom {
         return mTargetRotate;
     }
 
-    public IMGHoming getStartHoming(float scrollX, float scrollY) {
-        return new IMGHoming(scrollX, scrollY, getScale(), getRotate());
+    public ImageHoming getStartHoming(float scrollX, float scrollY) {
+        return new ImageHoming(scrollX, scrollY, getScale(), getRotate());
     }
 
-    public IMGHoming getEndHoming(float scrollX, float scrollY) {
-        IMGHoming homing = new IMGHoming(scrollX, scrollY, getScale(), getTargetRotate());
+    public ImageHoming getEndHoming(float scrollX, float scrollY) {
+        ImageHoming homing = new ImageHoming(scrollX, scrollY, getScale(), getTargetRotate());
 
         RectF frame = new RectF(mClipWin.getTargetFrame());
         frame.offset(scrollX, scrollY);
@@ -88,7 +87,7 @@ public class ImageCustom {
             mMatrix.setRotate(getTargetRotate(), mClipFrame.centerX(), mClipFrame.centerY());
             mMatrix.mapRect(clipFrame, mClipFrame);
 
-            homing.rConcat(IMGUtils.fill(frame, clipFrame));
+            homing.rConcat(ImageUtils.fill(frame, clipFrame));
         } else {
             RectF cFrame = new RectF();
 
@@ -98,13 +97,13 @@ public class ImageCustom {
                 mMatrix.setRotate(getTargetRotate() - getRotate(), mClipFrame.centerX(), mClipFrame.centerY());
                 mMatrix.mapRect(cFrame, mClipWin.getOffsetFrame(scrollX, scrollY));
 
-                homing.rConcat(IMGUtils.fitHoming(frame, cFrame, mClipFrame.centerX(), mClipFrame.centerY()));
+                homing.rConcat(ImageUtils.fitHoming(frame, cFrame, mClipFrame.centerX(), mClipFrame.centerY()));
 
 
             } else {
                 mMatrix.setRotate(getTargetRotate(), mClipFrame.centerX(), mClipFrame.centerY());
                 mMatrix.mapRect(cFrame, mFrame);
-                homing.rConcat(IMGUtils.fillHoming(frame, cFrame, mClipFrame.centerX(), mClipFrame.centerY()));
+                homing.rConcat(ImageUtils.fillHoming(frame, cFrame, mClipFrame.centerX(), mClipFrame.centerY()));
             }
 
         }

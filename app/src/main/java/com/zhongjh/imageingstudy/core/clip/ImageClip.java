@@ -3,10 +3,9 @@ package com.zhongjh.imageingstudy.core.clip;
 import android.graphics.RectF;
 
 /**
- * Created by felix on 2017/11/28 下午6:15.
+ * 裁剪区域接口
  */
-
-public interface IMGClip {
+public interface ImageClip {
 
     /**
      * 裁剪区域的边距
@@ -63,16 +62,40 @@ public interface IMGClip {
     };
 
     enum Anchor {
+        /**
+         * 左
+         */
         LEFT(1),
+        /**
+         * 右
+         */
         RIGHT(2),
+        /**
+         * 上
+         */
         TOP(4),
+        /**
+         * 下
+         */
         BOTTOM(8),
+        /**
+         * 左上
+         */
         LEFT_TOP(5),
+        /**
+         * 右上
+         */
         RIGHT_TOP(6),
+        /**
+         * 左下
+         */
         LEFT_BOTTOM(9),
+        /**
+         * 右下
+         */
         RIGHT_BOTTOM(10);
 
-        int v;
+        final int value;
 
         /**
          * LEFT: 0
@@ -80,33 +103,43 @@ public interface IMGClip {
          * RIGHT: 1
          * BOTTOM: 3
          */
-
-        final static int P = 0, N = 1;
-
-        final static int H = 0, V = 2;
-
         final static int[] PN = {1, -1};
 
-        Anchor(int v) {
-            this.v = v;
+        Anchor(int value) {
+            this.value = value;
         }
 
-        public void move(RectF win, RectF frame, float dx, float dy) {
+        final static int COUNT = 4;
+
+        /**
+         * 控制某个点移动，移动某个点后，相邻两个点会跟着移动
+         *
+         * @param win       裁剪总窗口
+         * @param frame     裁剪区域
+         * @param distanceX 手指在x轴上的移动
+         * @param distanceY 手指在y轴上的移动
+         */
+        public void move(RectF win, RectF frame, float distanceX, float distanceY) {
+            // 计算最大值,4个角以CLIP_MARGIN为计算
             float[] maxFrame = cohesion(win, CLIP_MARGIN);
+            // 计算最小值,4个角以CLIP_FRAME_MIN为计算,裁剪窗体
             float[] minFrame = cohesion(frame, CLIP_FRAME_MIN);
+            // 移动后的theFrame
             float[] theFrame = cohesion(frame, 0);
 
-            float[] dxy = {dx, 0, dy};
-            for (int i = 0; i < 4; i++) {
-                if (((1 << i) & v) != 0) {
+            float[] dxy = {distanceX, 0, distanceY};
+            // 循环4个角
+            for (int i = 0; i < COUNT; i++) {
+                // 1 << i 分别得出1、2、4、8（左右上下）,比如value是LEFT_BOTTOM值的话，那么1、8就满足条件
+                if (((1 << i) & value) != 0) {
 
                     int pn = PN[i & 1];
-
+                    // 计算移动后的值 - 通过revise限制了最大值和最小值
                     theFrame[i] = pn * revise(pn * (theFrame[i] + dxy[i & 2]),
                             pn * maxFrame[i], pn * minFrame[i + PN[i & 1]]);
                 }
             }
-
+            // 赋值裁剪区域
             frame.set(theFrame[0], theFrame[2], theFrame[1], theFrame[3]);
         }
 
@@ -129,7 +162,7 @@ public interface IMGClip {
         public static Anchor valueOf(int v) {
             Anchor[] values = values();
             for (Anchor anchor : values) {
-                if (anchor.v == v) {
+                if (anchor.value == v) {
                     return anchor;
                 }
             }

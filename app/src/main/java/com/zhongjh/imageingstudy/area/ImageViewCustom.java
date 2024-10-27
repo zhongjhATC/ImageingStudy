@@ -7,12 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.FrameLayout;
 
-import com.zhongjh.imageingstudy.area.anim.IMGHomingAnimator;
-import com.zhongjh.imageingstudy.area.homing.IMGHoming;
-import com.zhongjh.imageingstudy.common.IMGMode;
+import com.zhongjh.imageingstudy.area.anim.ImageHomingAnimator;
+import com.zhongjh.imageingstudy.area.homing.ImageHoming;
 
 /**
  * 包含ImageView
@@ -21,7 +19,7 @@ import com.zhongjh.imageingstudy.common.IMGMode;
  */
 public class ImageViewCustom  extends FrameLayout implements ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener {
 
-    private IMGHomingAnimator mHomingAnimator;
+    private ImageHomingAnimator mHomingAnimator;
     private final ImageCustom mImage = new ImageCustom();
 
 
@@ -96,12 +94,12 @@ public class ImageViewCustom  extends FrameLayout implements ValueAnimator.Anima
     /**
      * 开始了矫正动画
      */
-    private void startHoming(IMGHoming sHoming, IMGHoming eHoming) {
+    private void startHoming(ImageHoming sHoming, ImageHoming eHoming) {
         eHoming.x = 0;
         eHoming.y = 0;
         eHoming.scale = 0.5F;
         if (mHomingAnimator == null) {
-            mHomingAnimator = new IMGHomingAnimator();
+            mHomingAnimator = new ImageHomingAnimator();
             mHomingAnimator.addUpdateListener(this);
             mHomingAnimator.addListener(this);
         }
